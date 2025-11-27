@@ -20,7 +20,7 @@ h2,h3,h4 { font-weight:600; margin:10px 0;}
 #startBtn { margin-top:30px; padding:16px 32px; background:#143D33; color:white; font-size:22px; border:none; border-radius:12px; cursor:pointer; opacity:0; display:inline-block; pointer-events:none; }
 
 .quiz-container { display:none; margin-top:50px; }
-#emojiTop { font-size:42px; margin-bottom:12px; opacity:0; transition: opacity 2s; font-weight:600;}
+#emojiTop { font-size:42px; margin-bottom:12px; opacity:0; transition: opacity 2.5s; font-weight:600;}
 .question { font-size:22px; margin-bottom:15px; }
 .option { background:#0F1D19; border:1px solid #1B4F42; padding:14px; margin:10px auto; width:80%; border-radius:10px; cursor:pointer; transition:0.3s transform,0.3s background; font-size:20px; font-weight:500; }
 .option:hover { background:#143D33; transform:scale(1.05); }
@@ -69,12 +69,19 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-// Full 60+ questions array (replace with your full set)
+// Full 60+ questions array
 const questions=[
 {q:"What is the transaction mechanism of Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
 {q:"Which innovation allows Symphony consensus?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
 {q:"Which feature allows Scheduled Transactions without external keepers?", a:["❖ Eliminates need for external keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ Eliminates need for external keepers"},
-// … add all 60+ questions here
+{q:"What storage approach does Modular Storage utilize?", a:["❖ Storage-agnostic","❖ Centralized only","❖ Cloud only","❖ Decentralized only"], correct:"❖ Storage-agnostic"},
+{q:"What does EVM++ Extensions support?", a:["❖ In-demand EIPs","❖ Only EVM","❖ Gas optimization","❖ None"], correct:"❖ In-demand EIPs"},
+{q:"What allows nodes to participate in consensus?", a:["❖ Guardians opt-in","❖ Full nodes only","❖ Mining","❖ Delegation"], correct:"❖ Guardians opt-in"},
+{q:"Which network backs Ritual nodes via Native Infernet Integration?", a:["❖ Infernet compute oracle","❖ Ethereum","❖ Binance","❖ Solana"], correct:"❖ Infernet compute oracle"},
+{q:"What are the core areas of Modular Computational Integrity?", a:["❖ Provenance, privacy, computational integrity","❖ Speed, security, cost","❖ Gas, fee, consensus","❖ Sharding, scaling, storage"], correct:"❖ Provenance, privacy, computational integrity"},
+{q:"Native Account Abstraction expands?", a:["❖ EOA capabilities","❖ Only smart contracts","❖ Tokens","❖ NFTs"], correct:"❖ EOA capabilities"},
+{q:"What is specialized execution used for?", a:["❖ AI inference, ZK proofs, TEE code, cross-chain state","❖ Mining","❖ Only smart contracts","❖ None"], correct:"❖ AI inference, ZK proofs, TEE code, cross-chain state"},
+// … continue filling all 60+ questions here
 ];
 
 // Fixed mascot question
@@ -82,7 +89,7 @@ const fixedQuestion={q:"What is Ritual mascot?", a:["❖ SIGGY","❖ RITZY","❖
 
 function shuffleArray(arr){ return arr.sort(()=>Math.random()-0.5); }
 
-let usedQuestions=new Set(); // track already used questions in session
+let usedQuestions=new Set();
 let currentQ=0, score=0, roundQuestions=[];
 const startBtn=document.getElementById('startBtn');
 const intro=document.getElementById('intro');
@@ -114,11 +121,9 @@ window.onload = () => {
 startBtn.addEventListener('click', startQuiz);
 retakeBtn.addEventListener('click', startQuiz);
 
-// --- PICK ROUND QUESTIONS FUNCTION ---
 function pickRoundQuestions(){
-    // Filter out already used questions
     let available = questions.filter(q=>!usedQuestions.has(q.q));
-    if(available.length < 10) { usedQuestions.clear(); available = [...questions]; }
+    if(available.length<10){ usedQuestions.clear(); available = [...questions]; }
     const shuffled = shuffleArray(available);
     const round = shuffled.slice(0,10);
     round.push(fixedQuestion);
@@ -129,7 +134,6 @@ function pickRoundQuestions(){
     }));
 }
 
-// --- QUIZ FUNCTIONS ---
 function startQuiz(){
     intro.style.display='none';
     resultScreen.style.display='none';
@@ -190,7 +194,6 @@ function showResult(){
     launchConfetti();
 }
 
-// Confetti function
 function launchConfetti(){
     const duration = 3000;
     const end = Date.now() + duration;
