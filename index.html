@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritual Quiz Challenge</title>
+<style>
+  body {
+    font-family:'Segoe UI', sans-serif;
+    background:#E6F0E8;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+  }
+  .container {
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    width:100%;
+    max-width:600px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .fade-in { opacity:0; animation:fadeIn 2s forwards; }
+  @keyframes fadeIn { to {opacity:1;} }
+  .question { font-size:1.2em; margin-bottom:20px; color:#0F5132; }
+  .options button {
+    display:block;
+    margin:10px auto;
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    background:#0F5132;
+    color:white;
+    font-size:1em;
+    cursor:pointer;
+    transition:0.2s;
+  }
+  .options button:hover {
+    background:#146C43;
+    transform:scale(1.05);
+  }
+  .result { font-size:1.2em; margin-top:20px; color:#0F5132; animation:pop 0.5s ease forwards; }
+  .next-btn {
+    display:none;
+    margin-top:20px;
+    padding:12px 25px;
+    background:#0F5132;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:1em;
+    transition:0.2s;
+  }
+  .next-btn:hover { background:#146C43; transform:scale(1.05); }
+  .mascot { font-size:4em; margin-top:20px; opacity:0; }
+  .intro { font-size:1.5em; margin-bottom:20px; color:#0F5132; }
+  .footer { margin-top:30px; font-size:0.9em; }
+  .footer a { color:#0F5132; text-decoration:none; }
+  .footer a:hover { text-decoration:underline; }
+  #startBtn {
+    display:block;
+    margin:100px auto 0 auto;
+    padding:15px 30px;
+    font-size:1.2em;
+    border-radius:10px;
+    cursor:pointer;
+    background:#0F5132;
+    color:white;
+    border:none;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  #startBtn:hover { transform:scale(1.05); background:#146C43; }
+  @keyframes pop { 0%{transform:scale(0);} 70%{transform:scale(1.2);} 100%{transform:scale(1);} }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Intro Page -->
+  <div id="introPage" class="fade-in">
+    <div class="intro">How Ritual‑aligned are you?<br>Let's find out!</div>
+    <button id="startBtn">Click to Begin Quiz</button>
+    <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
+  </div>
+
+  <!-- Quiz Page -->
+  <div id="quizPage" style="display:none;">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="result" id="feedback"></div>
+    <button id="nextBtn" class="next-btn">Next Question</button>
+    <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
+  </div>
+
+  <!-- Final Page -->
+  <div id="finalPage" style="display:none;">
+    <div class="result" id="finalScore"></div>
+    <div class="mascot" id="mascot">SIGGY 😎</div>
+    <button id="restartBtn" class="next-btn">Retake Quiz</button>
+    <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
+  </div>
+
+</div>
+
+<script>
+// ---------- QUESTIONS ----------
+const fullQuestionBank = [
+  // EASY QUESTIONS
+  {id:"q1", difficulty:"easy", question:"What is the mission of Ritual blockchain?", options:["Scalable payments","Enrich what users can do on‑chain","Private messaging","Social media platform"], answer:"Enrich what users can do on‑chain"},
+  {id:"q2", difficulty:"easy", question:"Ritual combines crypto with which other technology focus?", options:["Cloud gaming","Social networks","Artificial Intelligence","Real‑estate"], answer:"Artificial Intelligence"},
+  {id:"q3", difficulty:"easy", question:"Which term describes Ritual allowing diverse compute types (AI, ZK, TEE) on‑chain?", options:["Homogeneous compute","Heterogeneous compute","Basic compute","Legacy compute"], answer:"Heterogeneous compute"},
+  {id:"q4", difficulty:"easy", question:"True or False: Ritual supports storage‑agnostic data storage (Web2 or Web3) through Modular Storage.", options:["True","False","Only Web3","Only Web2"], answer:"True"},
+  {id:"q5", difficulty:"easy", question:"Which feature in Ritual allows running scheduled or recurring smart contract calls without external keepers?", options:["Resonance","Symphony","Scheduled Transactions","Modular Storage"], answer:"Scheduled Transactions"},
+  {id:"q6", difficulty:"easy", question:"Does Ritual aim to support novel behaviors beyond standard blockchain transactions?", options:["Yes","No","Only DeFi","Only NFTs"], answer:"Yes"},
+  {id:"q7", difficulty:"easy", question:"Ritual’s blockchain is optimized to support which kind of compute-intensive workloads?", options:["Only token transfers","AI inference, ZK proofs, TEEs, cross‑chain state","Only storage","Only NFTs"], answer:"AI inference, ZK proofs, TEEs, cross‑chain state"},
+  {id:"q8", difficulty:"easy", question:"Which mechanism in Ritual handles flexible execution pricing and matching compute jobs to nodes?", options:["Symphony","Resonance","EVM++","Modular Storage"], answer:"Resonance"},
+  {id:"q9", difficulty:"easy", question:"True or False: Ritual uses a new consensus model to support heavy and varied compute workloads.", options:["True","False","Only PoW","Only Classic EVM"], answer:"True"},
+  {id:"q10", difficulty:"easy", question:"Ritual’s architectural goal is to be a backend for other blockchains needing heavy compute. (Yes/No)", options:["Yes","No","Maybe","Only for Ethereum"], answer:"Yes"},
+  {id:"q11", difficulty:"easy", question:"Which storage backends does Ritual’s Modular Storage potentially support?", options:["Only Web3","Only Web2","Web2 and Web3","Local only"], answer:"Web2 and Web3"},
+  {id:"q12", difficulty:"easy", question:"Is Ritual EVM‑compatible (via EVM++) to facilitate developer adoption?", options:["Yes","No","Only partly","Not sure"], answer:"Yes"},
+  {id:"q13", difficulty:"easy", question:"Which feature lets users execute complex compute (AI/ZK) without every node re‑executing it?", options:["Resonance","Node Specialization & Symphony","Modular Storage","Scheduled Transactions"], answer:"Node Specialization & Symphony"},
+  {id:"q14", difficulty:"easy", question:"Can developers on Ritual integrate AI models natively into smart contracts (inference, fine‑tuning, etc)?", options:["Yes","No","Only storage","Only separate off‑chain"], answer:"Yes"},
+  {id:"q15", difficulty:"easy", question:"Does Ritual aim to make on‑chain AI open, verifiable, and censorship‑resistant?", options:["Yes","No","Only private","Only off‑chain"], answer:"Yes"},
+  {id:"q16", difficulty:"easy", question:"Which mechanism allows users to express cost or speed preference when submitting compute‑heavy transactions?", options:["GasFee","Resonance","EVM","StorageFee"], answer:"Resonance"},
+  {id:"q17", difficulty:"easy", question:"Does Ritual support expressive compute beyond standard smart‑contract logic?", options:["Yes","No","Only token transfers","Only NFTs"], answer:"Yes"},
+  {id:"q18", difficulty:"easy", question:"True or False: Modular Storage discards the need for on‑chain storage for large data (like AI model weights).", options:["True","False","Only sometimes","Not specified"], answer:"True"},
+  {id:"q19", difficulty:"easy", question:"Ritual aims to attract which kind of users/developers beyond traditional blockchain users?", options:["Only traders","AI & infrastructure builders","Only gamers","Only artists"], answer:"AI & infrastructure builders"},
+  {id:"q20", difficulty:"easy", question:"Which technology domains does Ritual intend to support under its heterogeneous compute design?", options:["Just AI","AI, ZK proofs, TEEs, cross‑chain operations","Only ZK","Only storage"], answer:"AI, ZK proofs, TEEs, cross‑chain operations"},
+
+  // ... MID + TECH questions would continue up to 60+ (truncated for brevity)
+];
+
+// ---------- QUIZ LOGIC ----------
+let currentRoundQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+
+// DOM Elements
+const introPage = document.getElementById('introPage');
+const startBtn = document.getElementById('startBtn');
+const quizPage = document.getElementById('quizPage');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const feedbackEl = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
+const finalPage = document.getElementById('finalPage');
+const finalScoreEl = document.getElementById('finalScore');
+const mascotEl = document.getElementById('mascot');
+const restartBtn = document.getElementById('restartBtn');
+
+// --- START QUIZ ---
+startBtn.onclick = () => {
+  introPage.style.display = 'none';
+  quizPage.style.display = 'block';
+  startRound();
+};
+
+// --- RESTART QUIZ ---
+restartBtn.onclick = () => {
+  finalPage.style.display = 'none';
+  score = 0;
+  currentQuestionIndex = 0;
+  startRound();
+  quizPage.style.display = 'block';
+};
+
+// --- START ROUND ---
+function startRound() {
+  feedbackEl.innerText = '';
+  nextBtn.style.display = 'none';
+  // shuffle and pick 10 questions per round
+  currentRoundQuestions = shuffleArray(fullQuestionBank).slice(0,10);
+  currentQuestionIndex = 0;
+  loadQuestion();
+}
+
+// --- LOAD QUESTION ---
+function loadQuestion() {
+  feedbackEl.innerText = '';
+  nextBtn.style.display = 'none';
+  const q = currentRoundQuestions[currentQuestionIndex];
+  questionEl.innerText = q.question;
+  optionsEl.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(opt);
+    optionsEl.appendChild(btn);
+  });
+}
+
+// --- CHECK ANSWER ---
+function checkAnswer(selected) {
+  const q = currentRoundQuestions[currentQuestionIndex];
+  if(selected === q.answer){
+    feedbackEl.innerText = 'Correct!';
+    score++;
+  } else {
+    feedbackEl.innerText = `Wrong! Correct answer: ${q.answer}`;
+  }
+  nextBtn.style.display = 'block';
+}
+
+// --- NEXT QUESTION ---
+nextBtn.onclick = () => {
+  currentQuestionIndex++;
+  if(currentQuestionIndex >= currentRoundQuestions.length){
+    showFinal();
+  } else {
+    loadQuestion();
+  }
+}
+
+// --- SHOW FINAL RESULTS ---
+function showFinal() {
+  quizPage.style.display = 'none';
+  finalPage.style.display = 'block';
+  const percent = Math.round((score/currentRoundQuestions.length)*100);
+  finalScoreEl.innerText = `You scored ${percent}% (${score}/${currentRoundQuestions.length})`;
+  mascotEl.style.opacity = 1;
+  mascotEl.innerText = percent >= 70 ? 'SIGGY 😎' : 'SIGGY 😢';
+}
+
+// --- UTILITY: SHUFFLE ---
+function shuffleArray(array) {
+  const arr = [...array];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+</script>
+</body>
+</html>
