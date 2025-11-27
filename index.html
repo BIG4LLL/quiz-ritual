@@ -20,6 +20,7 @@ body {
 #letsFindOut { font-size:24px; opacity:0; transition: opacity 2s;}
 #startBtn { margin-top:30px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;}
 @keyframes popUp { 0%{transform:scale(0.3);opacity:0;}50%{transform:scale(1.1);opacity:1;}70%{transform:scale(0.95);}100%{transform:scale(1);} }
+
 /* QUIZ */
 .quiz-container { display:none; margin-top:50px; }
 #emojiTop { font-size:40px; margin-bottom:10px; opacity:0; transition: opacity 2s;}
@@ -35,6 +36,7 @@ body {
 #emojiResult { font-size:70px; margin-top:20px; animation:bounceEmoji 1s ease; }
 @keyframes bounceEmoji {0%{transform:scale(0);}50%{transform:scale(1.2);}70%{transform:scale(0.9);}100%{transform:scale(1);}}
 a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; display:block; }
+
 </style>
 </head>
 <body>
@@ -70,7 +72,7 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">Built by THE_REAL_BIG4L</a>
 
 <script>
-// Sample questions (add more as needed)
+// Questions (expand as needed)
 const questions=[
   {q:"What is the transaction mechanism used by Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
   {q:"Which innovation allows the Symphony consensus protocol to operate efficiently?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
@@ -107,7 +109,7 @@ const resultProgressBar=document.getElementById('resultProgressBar');
 const evaluationText=document.getElementById('evaluationText');
 const emojiTopAll=document.querySelectorAll('#emojiTop');
 
-// Start Quiz
+// Start Quiz (shuffle questions every time)
 function startQuiz(){
     score=0;
     currentQ=0;
@@ -116,8 +118,8 @@ function startQuiz(){
     resultScreen.style.display='none';
     quiz.style.display='block';
 
-    emojiTopAll.forEach(e=>{ 
-        e.style.display='block'; 
+    emojiTopAll.forEach(e=>{
+        e.style.display='block';
         e.style.opacity=0;
         e.textContent="❖ Ritual";
         setTimeout(()=>{ e.style.opacity=1; },50);
@@ -127,12 +129,15 @@ function startQuiz(){
     showQuestion();
 }
 
-// Pick 10 random + fixed mascot, shuffle
+// Pick 10 random + mascot, shuffle
 function pickRoundQuestions(){
     const shuffled=shuffleArray([...questions]);
     const round=shuffled.slice(0,10);
     round.push(fixedQuestion);
-    return shuffleArray(round.map(q=>{ q.a=shuffleArray([...q.a]); return q;}));
+    return shuffleArray(round.map(q=>{
+        q.a=shuffleArray([...q.a]);
+        return q;
+    }));
 }
 
 // Show question
@@ -141,7 +146,7 @@ function showQuestion(){
     const q=roundQuestions[currentQ];
     questionText.textContent=q.q;
     optionsContainer.innerHTML='';
-    progressBar.style.width=((currentQ)/roundQuestions.length*100)+'%';
+    progressBar.style.width=(currentQ/roundQuestions.length*100)+'%';
     q.a.forEach(opt=>{
         const btn=document.createElement('div');
         btn.className='option';
