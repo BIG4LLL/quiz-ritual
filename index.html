@@ -14,93 +14,41 @@ body {
     overflow-x: hidden;
     animation: bgFade 12s ease-in-out infinite alternate;
 }
-@keyframes bgFade {
-    0% { background-color: #09120F; }
-    100% { background-color: #0F1E19; }
-}
+@keyframes bgFade { 0% { background-color:#09120F; } 100% { background-color:#0F1E19; } }
 
-#intro {
-    margin-top: 200px;
-    opacity: 0;
-    animation: fadeIn 2s forwards;
-}
+#intro { margin-top: 200px; opacity:0; animation: fadeIn 2s forwards; }
 @keyframes fadeIn { 100% { opacity: 1; } }
 
 #startBtn {
-    margin-top: 40px;
-    padding: 14px 28px;
-    background: #143D33;
-    color: white;
-    font-size: 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: none;
-    animation: popUp 0.8s ease forwards;
+    margin-top:40px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;
 }
-@keyframes popUp {
-    0% { transform: scale(0.3); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
+@keyframes popUp { 0%{transform:scale(0.3);opacity:0;} 100%{transform:scale(1);opacity:1;} }
 
 .quiz-container { display:none; margin-top:50px; }
 .question { font-size:24px; margin-bottom:10px; }
 .option {
-    background:#0F1D19;
-    border:1px solid #1B4F42;
-    padding:12px;
-    margin:10px auto;
-    width:80%;
-    border-radius:8px;
-    cursor:pointer;
-    transition:0.3s;
+    background:#0F1D19; border:1px solid #1B4F42; padding:12px; margin:10px auto; width:80%; border-radius:8px; cursor:pointer; transition:0.3s;
 }
 .option:hover { background:#143D33; }
 .correct { background:#143D33 !important; border-color:#29FFBF; }
 .wrong { background:#3D0F0F !important; border-color:#FF4F4F; }
 
-#nextBtn, #retakeBtn {
-    background:#143D33;
-    color:white;
-    padding:12px 24px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:18px;
-    margin-top:20px;
-    display:none;
-    transition:0.3s;
-}
-#nextBtn:hover, #retakeBtn:hover { background:#1B4F42; }
+#nextBtn,#retakeBtn { background:#143D33; color:white; padding:12px 24px; border:none; border-radius:8px; cursor:pointer; font-size:18px; margin-top:20px; display:none; transition:0.3s; }
+#nextBtn:hover,#retakeBtn:hover { background:#1B4F42; }
 
 #emojiResult { font-size:70px; margin-top:20px; animation: popUp 1s ease; }
-#progressContainer {
-    width: 80%;
-    height: 20px;
-    background: #1B4F42;
-    margin: 0 auto 20px;
-    border-radius: 10px;
-}
-#progressBar {
-    height: 100%;
-    width: 0%;
-    background: #29FFBF;
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
+
+#progressContainer { width:80%; height:20px; background:#1B4F42; margin:0 auto 20px; border-radius:10px; }
+#progressBar { height:100%; width:0%; background:linear-gradient(90deg,#29FFBF,#14D9A2); border-radius:10px; transition: width 0.8s ease-in-out; box-shadow:0 0 8px #29FFBF80; }
 
 a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; display:block; }
-
 </style>
 </head>
 <body>
 
 <!-- INTRO -->
 <div id="intro">
-    <h1 style="font-size:48px; line-height:1.2;">
-        How Ritual Aligned Are You?<br>
-        <span style="font-size:32px;">Let's Find Out!</span>
-    </h1>
+    <h1 style="font-size:48px; line-height:1.2;">How Ritual Aligned Are You?<br><span style="font-size:32px;">Let's Find Out!</span></h1>
     <button id="startBtn">Begin Quiz</button>
 </div>
 
@@ -123,61 +71,65 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">Built by THE_REAL_BIG4L</a>
 
 <script>
-const startBtn = document.getElementById('startBtn');
-const intro = document.getElementById('intro');
-const quiz = document.getElementById('quiz');
-const questionText = document.getElementById('questionText');
-const optionsContainer = document.getElementById('optionsContainer');
-const nextBtn = document.getElementById('nextBtn');
-const resultScreen = document.getElementById('resultScreen');
-const emojiResult = document.getElementById('emojiResult');
-const scorePercent = document.getElementById('scorePercent');
-const retakeBtn = document.getElementById('retakeBtn');
-const progressBar = document.getElementById('progressBar');
+const startBtn=document.getElementById('startBtn');
+const intro=document.getElementById('intro');
+const quiz=document.getElementById('quiz');
+const questionText=document.getElementById('questionText');
+const optionsContainer=document.getElementById('optionsContainer');
+const nextBtn=document.getElementById('nextBtn');
+const resultScreen=document.getElementById('resultScreen');
+const emojiResult=document.getElementById('emojiResult');
+const scorePercent=document.getElementById('scorePercent');
+const retakeBtn=document.getElementById('retakeBtn');
+const progressBar=document.getElementById('progressBar');
 
 // Example questions (replace/add to reach 60+)
-const questions = [
-  // Easy (3)
+const questions=[
   {q:"Ritual is primarily a ___ network?", a:["Web3","Social","AI","Gaming"], correct:"Web3", difficulty:"easy"},
   {q:"What does SIGGY represent?", a:["Mascot","Server","Token","Protocol"], correct:"Mascot", difficulty:"easy"},
   {q:"Ritual focuses on which type of storage innovation?", a:["Centralized","Decentralized","Modular Storage","HDFS"], correct:"Modular Storage", difficulty:"easy"},
-  // Mid (4)
   {q:"Which consensus mechanism does Ritual use?", a:["Proof of Work","Proof of Stake","Modular Storage","Delegated PoS"], correct:"Modular Storage", difficulty:"mid"},
   {q:"How many node types exist in Ritual?", a:["2","3","4","5"], correct:"3", difficulty:"mid"},
   {q:"Ritual’s key advantage over centralized AI?", a:["Speed","Cost","Decentralization","Privacy"], correct:"Privacy", difficulty:"mid"},
   {q:"Which node specialization improves performance?", a:["Edge Nodes","Cloud Nodes","Central Nodes","GPU Nodes"], correct:"Edge Nodes", difficulty:"mid"},
-  // Technical (3)
   {q:"Node specialization enables?", a:["Task splitting","Data theft","Single point","Slower processing"], correct:"Task splitting", difficulty:"tech"},
   {q:"Protocol ensuring data redundancy?", a:["Sharding","Modular Storage","Centralized DB","IPFS"], correct:"Modular Storage", difficulty:"tech"},
   {q:"Which layer handles AI computation?", a:["Edge nodes","Central nodes","Cloud nodes","GPU nodes"], correct:"Edge nodes", difficulty:"tech"},
+  // Add all 60+ questions here
 ];
 
-let shuffledQuestions = [];
-let currentQ = 0;
-let score = 0;
+let shuffledQuestions=[];
+let currentQ=0;
+let score=0;
 
-function shuffleArray(arr) { return arr.sort(()=>Math.random()-0.5); }
+// shuffle helper
+function shuffleArray(arr){ return arr.sort(()=>Math.random()-0.5); }
+
+// pick 10 questions per round
+function pickQuestionsForRound(){
+    const easy=shuffleArray(questions.filter(q=>q.difficulty==="easy")).slice(0,3);
+    const mid=shuffleArray(questions.filter(q=>q.difficulty==="mid")).slice(0,4);
+    const tech=shuffleArray(questions.filter(q=>q.difficulty==="tech")).slice(0,3);
+    const round=shuffleArray([...easy,...mid,...tech]);
+    round.forEach(q=>{ q.a=shuffleArray([...q.a]); }); // shuffle answers
+    return round;
+}
 
 function startQuiz(){
     intro.style.display='none';
     quiz.style.display='block';
-    let easy = shuffleArray(questions.filter(q=>q.difficulty==="easy")).slice(0,3);
-    let mid = shuffleArray(questions.filter(q=>q.difficulty==="mid")).slice(0,4);
-    let tech = shuffleArray(questions.filter(q=>q.difficulty==="tech")).slice(0,3);
-    shuffledQuestions = shuffleArray([...easy,...mid,...tech]);
+    shuffledQuestions=pickQuestionsForRound();
     currentQ=0; score=0;
     showQuestion();
 }
 
 function showQuestion(){
     nextBtn.style.display='none';
-    const q = shuffledQuestions[currentQ];
-    questionText.innerHTML = q.q;
-    optionsContainer.innerHTML = '';
-
-    // Update progress bar
-    let progressPercent = ((currentQ)/shuffledQuestions.length)*100;
-    progressBar.style.width = progressPercent + "%";
+    const q=shuffledQuestions[currentQ];
+    questionText.innerHTML=q.q;
+    optionsContainer.innerHTML='';
+    let progressPercent=((currentQ)/shuffledQuestions.length)*100;
+    progressBar.style.width=progressPercent+"%";
 
     q.a.forEach(opt=>{
         const btn=document.createElement('div');
@@ -188,22 +140,16 @@ function showQuestion(){
     });
 }
 
-function selectAnswer(btn, correct){
-    const buttons = document.querySelectorAll('.option');
+function selectAnswer(btn,correct){
+    const buttons=document.querySelectorAll('.option');
     buttons.forEach(b=>b.style.pointerEvents='none');
-    if(btn.textContent===correct){
-        score++;
-        btn.textContent += " ✅ Correct";
-        btn.classList.add('correct');
-    } else {
-        btn.textContent += ` ❌ Wrong, Correct: ${correct}`;
-        btn.classList.add('wrong');
-        buttons.forEach(b=>{ if(b.textContent===correct) b.classList.add('correct'); });
-    }
+    if(btn.textContent===correct){ score++; btn.textContent+=" ✅ Correct"; btn.classList.add('correct'); }
+    else{ btn.textContent+=` ❌ Wrong, Correct: ${correct}`; btn.classList.add('wrong'); 
+          buttons.forEach(b=>{ if(b.textContent===correct) b.classList.add('correct'); }); }
     nextBtn.style.display='inline-block';
 }
 
-nextBtn.addEventListener('click', ()=>{
+nextBtn.addEventListener('click',()=>{
     currentQ++;
     if(currentQ<shuffledQuestions.length) showQuestion();
     else showResult();
@@ -212,21 +158,21 @@ nextBtn.addEventListener('click', ()=>{
 function showResult(){
     quiz.style.display='none';
     resultScreen.style.display='block';
-    let percent = Math.round((score/shuffledQuestions.length)*100);
-    scorePercent.textContent = percent + "%";
+    let percent=Math.round((score/shuffledQuestions.length)*100);
+    scorePercent.textContent=percent+"%";
     if(percent>=70) emojiResult.textContent="😃";
     else if(percent>=50) emojiResult.textContent="😐";
     else emojiResult.textContent="😔";
     retakeBtn.style.display='inline-block';
 }
 
-retakeBtn.addEventListener('click', ()=>{
+retakeBtn.addEventListener('click',()=>{
     resultScreen.style.display='none';
     startQuiz();
 });
 
 setTimeout(()=>{ startBtn.style.display='inline-block'; },2000);
-startBtn.addEventListener('click', startQuiz);
+startBtn.addEventListener('click',startQuiz);
 </script>
 </body>
 </html>
