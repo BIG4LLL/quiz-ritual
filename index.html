@@ -78,17 +78,6 @@ body {
   transition: 0.2s;
 }
 .next-btn:hover { background: #146C43; transform: scale(1.05); }
-.mascot {
-  margin-top: 25px;
-  opacity: 0;
-  transform: translateY(50px);
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  transition: all 0.6s ease;
-}
-.mascot.show { opacity: 1; transform: translateY(0); animation: bounce 1s; }
-@keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-15px);} 60% {transform: translateY(-7px);} }
 .intro { font-size: 1.6em; margin-bottom: 20px; color: #0F5132; }
 #startBtn {
   display: block;
@@ -131,7 +120,7 @@ body {
   <!-- FINAL -->
   <div id="finalPage" style="display:none;">
     <div class="result" id="finalScore"></div>
-    <img id="mascot" class="mascot" alt="SIGGY">
+    <div class="result" id="finalEmoji" style="font-size: 4em; margin-top: 20px;"></div>
     <button id="restartBtn" class="next-btn">Retake Quiz</button>
     <div class="footer">Built by <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">@THE_REAL_BIG4L</a></div>
   </div>
@@ -141,11 +130,18 @@ body {
 <script>
 // ---------------- QUESTIONS ----------------
 const fullQuestionBank = [
-  // placeholder 60+ questions, expand as needed
+  // Example 60+ questions (fill these from Ritual docs)
   {id:"q1", difficulty:"easy", question:"What is the mission of Ritual blockchain?", options:["Scalable payments","Enrich what users can do on‑chain","Private messaging","Social media platform"], answer:"Enrich what users can do on‑chain"},
-  {id:"q2", difficulty:"easy", question:"Ritual combines crypto with which other technology focus?", options:["Cloud gaming","Social networks","Artificial Intelligence","Real‑estate"], answer:"Artificial Intelligence"},
-  {id:"q3", difficulty:"easy", question:"Which term describes Ritual allowing diverse compute types (AI, ZK, TEE) on‑chain?", options:["Homogeneous compute","Heterogeneous compute","Basic compute","Legacy compute"], answer:"Heterogeneous compute"},
-  // Add up to 60+ here...
+  {id:"q2", difficulty:"easy", question:"Ritual combines crypto with which technology?", options:["Cloud gaming","Social networks","Artificial Intelligence","Real‑estate"], answer:"Artificial Intelligence"},
+  {id:"q3", difficulty:"easy", question:"Which term describes diverse compute types on-chain?", options:["Homogeneous compute","Heterogeneous compute","Basic compute","Legacy compute"], answer:"Heterogeneous compute"},
+  {id:"q4", difficulty:"mid", question:"Ritual modular storage is inspired by which system?", options:["AWS","Google Drive","Hugging Face","Dropbox"], answer:"Hugging Face"},
+  {id:"q5", difficulty:"mid", question:"What does DePIN stand for in Ritual context?", options:["Decentralized Physical Infrastructure Network","Decentralized Personal Information Node","Distributed Payment Integration Network","Decentralized Protocol Integration Node"], answer:"Decentralized Physical Infrastructure Network"},
+  {id:"q6", difficulty:"mid", question:"Which feature allows AI models to run on Ritual nodes?", options:["Node specialization","Centralized compute","Basic storage","Edge hosting"], answer:"Node specialization"},
+  {id:"q7", difficulty:"mid", question:"Ritual consensus mechanism is based on?", options:["PoW","PoS","Layered consensus","Multi-chain consensus"], answer:"Layered consensus"},
+  {id:"q8", difficulty:"hard", question:"How does Ritual ensure heterogeneous compute security?", options:["Trusted Execution Environments","Public API","Centralized nodes","Open networks"], answer:"Trusted Execution Environments"},
+  {id:"q9", difficulty:"hard", question:"Ritual supports which ZK proof system?", options:["Groth16","Plonk","Bulletproofs","SNARKs"], answer:"Plonk"},
+  {id:"q10", difficulty:"hard", question:"What is the main benefit of Ritual modular storage?", options:["Fast computation","Redundancy and resilience","Centralized access","Cheap storage"], answer:"Redundancy and resilience"},
+  // ... continue adding more questions until 60+
 ];
 
 // ---------------- QUIZ LOGIC ----------------
@@ -153,7 +149,12 @@ let currentRoundQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 
-// DOM
+// Separate questions by difficulty
+const easyQuestions = fullQuestionBank.filter(q => q.difficulty === "easy");
+const midQuestions  = fullQuestionBank.filter(q => q.difficulty === "mid");
+const hardQuestions = fullQuestionBank.filter(q => q.difficulty === "hard");
+
+// DOM Elements
 const introPage = document.getElementById('introPage');
 const startBtn = document.getElementById('startBtn');
 const quizPage = document.getElementById('quizPage');
@@ -163,21 +164,25 @@ const feedbackEl = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 const finalPage = document.getElementById('finalPage');
 const finalScoreEl = document.getElementById('finalScore');
-const mascotEl = document.getElementById('mascot');
+const finalEmojiEl = document.getElementById('finalEmoji');
 const restartBtn = document.getElementById('restartBtn');
 const progressBar = document.getElementById('progressBar');
 
-// Start Quiz
+// ---------------- EVENT LISTENERS ----------------
 startBtn.onclick = () => { introPage.style.display='none'; quizPage.style.display='block'; startRound(); };
-
-// Restart Quiz
 restartBtn.onclick = () => { finalPage.style.display='none'; score=0; currentQuestionIndex=0; startRound(); quizPage.style.display='block'; };
+nextBtn.onclick = () => { currentQuestionIndex++; updateProgressBar(); if(currentQuestionIndex >= currentRoundQuestions.length){ showFinal(); } else { loadQuestion(); } };
 
-// Start Round
+// ---------------- FUNCTIONS ----------------
+
+// Start Round with 3 hard, 5 mid, 2 easy
 function startRound() {
   feedbackEl.innerText=''; nextBtn.style.display='none';
-  currentRoundQuestions=shuffleArray(fullQuestionBank).slice(0,10);
-  currentQuestionIndex=0;
+  const easyPick = shuffleArray(easyQuestions).slice(0,2);
+  const midPick  = shuffleArray(midQuestions).slice(0,5);
+  const hardPick = shuffleArray(hardQuestions).slice(0,3);
+  currentRoundQuestions = shuffleArray([...easyPick, ...midPick, ...hardPick]);
+  currentQuestionIndex = 0;
   updateProgressBar();
   loadQuestion();
 }
@@ -185,56 +190,60 @@ function startRound() {
 // Load Question
 function loadQuestion() {
   feedbackEl.innerText=''; nextBtn.style.display='none';
-  const q=currentRoundQuestions[currentQuestionIndex];
+  const q = currentRoundQuestions[currentQuestionIndex];
   questionEl.style.opacity=0;
-  setTimeout(()=>{ questionEl.innerText=q.question; questionEl.style.opacity=1; }, 200);
+  setTimeout(()=>{ questionEl.innerText = q.question; questionEl.style.opacity=1; }, 200);
   optionsEl.innerHTML='';
   q.options.forEach(opt=>{
-    const btn=document.createElement('button');
-    btn.innerText=opt;
-    btn.onclick=()=>checkAnswer(opt);
+    const btn = document.createElement('button');
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(opt);
     optionsEl.appendChild(btn);
   });
 }
 
 // Check Answer
-function checkAnswer(selected){
-  const q=currentRoundQuestions[currentQuestionIndex];
+function checkAnswer(selected) {
+  const q = currentRoundQuestions[currentQuestionIndex];
   feedbackEl.innerHTML='';
-  const feedbackText=document.createElement('span');
-  feedbackText.innerText= selected===q.answer ? 'Correct!' : `Wrong! Correct: ${q.answer}`;
-  feedbackText.style.color= selected===q.answer ? '#146C43' : '#B02A37';
+  const feedbackText = document.createElement('span');
+  feedbackText.innerText = selected === q.answer ? 'Correct!' : `Wrong! Correct: ${q.answer}`;
+  feedbackText.style.color = selected === q.answer ? '#146C43' : '#B02A37';
 
-  const emoji=document.createElement('span');
+  const emoji = document.createElement('span');
   emoji.classList.add('emoji');
-  emoji.innerText=selected===q.answer ? '😄' : '😢';
+  emoji.innerText = selected === q.answer ? '😄' : '😢';
   feedbackText.appendChild(emoji);
   feedbackEl.appendChild(feedbackText);
 
-  if(selected===q.answer) score++;
-  nextBtn.style.display='block';
+  if(selected === q.answer) score++;
+  nextBtn.style.display = 'block';
 }
 
-// Next Question
-nextBtn.onclick=()=>{ currentQuestionIndex++; updateProgressBar(); if(currentQuestionIndex>=currentRoundQuestions.length){ showFinal(); }else{ loadQuestion(); } }
-
-// Show Final
-function showFinal(){
-  quizPage.style.display='none'; finalPage.style.display='block';
-  const percent=Math.round((score/currentRoundQuestions.length)*100);
-  finalScoreEl.innerText=`You scored ${percent}% (${score}/${currentRoundQuestions.length})`;
-  // SIGGY image from X post
-  mascotEl.src = percent>=70 ?
-    'https://pbs.twimg.com/media/Fm2c1h3WAAEGk4d?format=png&name=medium' :
-    'https://pbs.twimg.com/media/Fm2c1h3WAAEGk4d?format=png&name=medium';
-  mascotEl.classList.add('show');
+// Show Final Score & Emoji
+function showFinal() {
+  quizPage.style.display='none';
+  finalPage.style.display='block';
+  const percent = Math.round((score/currentRoundQuestions.length)*100);
+  finalScoreEl.innerText = `You scored ${percent}% (${score}/${currentRoundQuestions.length})`;
+  finalEmojiEl.innerText = percent >= 70 ? '😄' : '😢';
 }
 
-// Shuffle
-function shuffleArray(array){ const arr=[...array]; for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+// Shuffle Array Helper
+function shuffleArray(array) {
+  const arr = [...array];
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
-// Progress Bar
-function updateProgressBar(){ const progressPercent=Math.round((currentQuestionIndex/currentRoundQuestions.length)*100); progressBar.style.width=`${progressPercent}%`; }
+// Progress Bar Update
+function updateProgressBar() {
+  const progressPercent = Math.round((currentQuestionIndex/currentRoundQuestions.length)*100);
+  progressBar.style.width = `${progressPercent}%`;
+}
 </script>
 </body>
 </html>
