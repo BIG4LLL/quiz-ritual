@@ -69,12 +69,12 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-// Sample questions pool (replace with full 60+ questions)
+// Full 60+ questions array (replace with your full set)
 const questions=[
 {q:"What is the transaction mechanism of Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
 {q:"Which innovation allows Symphony consensus?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
 {q:"Which feature allows Scheduled Transactions without external keepers?", a:["❖ Eliminates need for external keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ Eliminates need for external keepers"},
-// Add remaining questions up to 60+ here
+// … add all 60+ questions here
 ];
 
 // Fixed mascot question
@@ -82,6 +82,7 @@ const fixedQuestion={q:"What is Ritual mascot?", a:["❖ SIGGY","❖ RITZY","❖
 
 function shuffleArray(arr){ return arr.sort(()=>Math.random()-0.5); }
 
+let usedQuestions=new Set(); // track already used questions in session
 let currentQ=0, score=0, roundQuestions=[];
 const startBtn=document.getElementById('startBtn');
 const intro=document.getElementById('intro');
@@ -115,11 +116,15 @@ retakeBtn.addEventListener('click', startQuiz);
 
 // --- PICK ROUND QUESTIONS FUNCTION ---
 function pickRoundQuestions(){
-    const shuffled=shuffleArray([...questions]);
-    const round=shuffled.slice(0,10); // pick 10 random
-    round.push(fixedQuestion);        // add mascot question
+    // Filter out already used questions
+    let available = questions.filter(q=>!usedQuestions.has(q.q));
+    if(available.length < 10) { usedQuestions.clear(); available = [...questions]; }
+    const shuffled = shuffleArray(available);
+    const round = shuffled.slice(0,10);
+    round.push(fixedQuestion);
+    round.forEach(q=>usedQuestions.add(q.q));
     return shuffleArray(round.map(q=>{
-        q.a=shuffleArray([...q.a]); // shuffle answers
+        q.a=shuffleArray([...q.a]);
         return q;
     }));
 }
@@ -133,6 +138,7 @@ function startQuiz(){
     score=0;
     roundQuestions=pickRoundQuestions();
     showQuestion();
+    document.getElementById('emojiTop').style.opacity=1;
 }
 
 function showQuestion(){
@@ -209,4 +215,4 @@ function launchConfetti(){
 }
 </script>
 </body>
-    </html>
+</html>
