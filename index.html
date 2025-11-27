@@ -12,60 +12,42 @@ body {
     color: #E8F3F0;
     text-align: center;
     overflow-x: hidden;
-    animation: bgFade 12s ease-in-out infinite alternate;
 }
-@keyframes bgFade { 0% { background-color:#09120F; } 100% { background-color:#0F1E19; } }
-
-#intro { margin-top: 200px; opacity:0; animation: fadeIn 2s forwards; }
-@keyframes fadeIn { 100% { opacity: 1; } }
-
+#intro { margin-top:150px; opacity:0; animation: fadeIn 2s forwards; }
+@keyframes fadeIn { 100% { opacity:1; } }
 #startBtn {
-    margin-top:40px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;
+    margin-top:30px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;
 }
-@keyframes popUp {
-    0% { transform: scale(0.3); opacity:0; }
-    50% { transform: scale(1.1); opacity:1; }
-    70% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-}
-
+@keyframes popUp { 0%{transform:scale(0.3);opacity:0;}50%{transform:scale(1.1);opacity:1;}70%{transform:scale(0.95);}100%{transform:scale(1);} }
 .quiz-container { display:none; margin-top:50px; }
-.question { font-size:22px; margin-bottom:10px; }
-.option {
-    background:#0F1D19; border:1px solid #1B4F42; padding:12px; margin:10px auto; width:80%; border-radius:8px; cursor:pointer; transition:0.3s transform,0.3s background;
-}
-.option:hover { background:#143D33; transform: scale(1.05); }
+#emojiTop { font-size:50px; margin-bottom:10px; display:none; }
+.question { font-size:20px; margin-bottom:10px; }
+.option { background:#0F1D19; border:1px solid #1B4F42; padding:12px; margin:10px auto; width:80%; border-radius:8px; cursor:pointer; transition:0.3s transform,0.3s background; }
+.option:hover { background:#143D33; transform:scale(1.05); }
 .correct { background:#143D33 !important; border-color:#29FFBF; }
 .wrong { background:#3D0F0F !important; border-color:#FF4F4F; }
-
 #nextBtn,#retakeBtn { background:#143D33; color:white; padding:12px 24px; border:none; border-radius:8px; cursor:pointer; font-size:18px; margin-top:20px; display:none; transition:0.3s; }
 #nextBtn:hover,#retakeBtn:hover { background:#1B4F42; }
-
-#emojiResult { font-size:70px; margin-top:20px; animation: bounceEmoji 1s ease; }
-@keyframes bounceEmoji {
-    0% { transform: scale(0); }
-    50% { transform: scale(1.2); }
-    70% { transform: scale(0.9); }
-    100% { transform: scale(1); }
-}
-
-#progressContainer { width:80%; height:20px; background:#1B4F42; margin:0 auto 20px; border-radius:10px; }
-#progressBar { height:100%; width:0%; background:linear-gradient(90deg,#29FFBF,#14D9A2); border-radius:10px; transition: width 0.8s ease-in-out, box-shadow 0.8s ease-in-out; box-shadow:0 0 8px #29FFBF80; }
-
+#progressContainer, #resultProgressContainer { width:80%; height:20px; background:#1B4F42; margin:0 auto 20px; border-radius:10px; }
+#progressBar, #resultProgressBar { height:100%; width:0%; background:linear-gradient(90deg,#29FFBF,#14D9A2); border-radius:10px; transition: width 1s ease-in-out; }
+#emojiResult { font-size:70px; margin-top:20px; animation:bounceEmoji 1s ease; }
+@keyframes bounceEmoji {0%{transform:scale(0);}50%{transform:scale(1.2);}70%{transform:scale(0.9);}100%{transform:scale(1);}}
 a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; display:block; }
-
 </style>
 </head>
 <body>
 
 <!-- INTRO -->
 <div id="intro">
-    <h1 style="font-size:48px; line-height:1.2;">How Ritual Aligned Are You?<br><span style="font-size:32px;">Let's Find Out!</span></h1>
+    <h2>❖ Ritual Quiz</h2>
+    <h3 id="introMain" style="font-size:32px; margin-top:20px; opacity:0;">How Ritual Aligned Are You?</h3>
+    <h4 id="letsFindOut" style="font-size:24px; margin-top:20px; opacity:0;">Let's Find Out</h4>
     <button id="startBtn">Begin Quiz</button>
 </div>
 
 <!-- QUIZ -->
 <div class="quiz-container" id="quiz">
+    <div id="emojiTop">❖</div>
     <div id="progressContainer"><div id="progressBar"></div></div>
     <div class="question" id="questionText"></div>
     <div id="optionsContainer"></div>
@@ -74,42 +56,42 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 
 <!-- RESULT -->
 <div class="quiz-container" id="resultScreen">
+    <div id="emojiTop">❖</div>
     <h2>Your Score:</h2>
     <div id="emojiResult"></div>
     <div id="scorePercent"></div>
+    <div id="resultProgressContainer"><div id="resultProgressBar"></div></div>
+    <div id="evaluationText" style="margin-top:20px; font-size:20px;"></div>
     <button id="retakeBtn">Retake Quiz</button>
 </div>
 
 <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">Built by THE_REAL_BIG4L</a>
 
 <script>
-// 60+ naturally phrased questions
-const questions = [
-  { q:"What is the transaction mechanism used by Resonance?", a:["Surplus-maximizing fee","Standard fee","Gas-free","PoS reward"], correct:"Surplus-maximizing fee" },
-  { q:"Which innovation allows the Symphony consensus protocol to operate efficiently?", a:["Dual proof sharding","PoW mining","Single chain validation","Randomized committees"], correct:"Dual proof sharding" },
-  { q:"Which feature allows Scheduled Transactions to work without external keepers?", a:["External keepers","Gas fees","User input","Smart contract calls"], correct:"External keepers" },
-  { q:"Which storage approach does Modular Storage utilize?", a:["Web2 & Web3 storage","Only Web2","Only Web3","No storage"], correct:"Web2 & Web3 storage" },
-  { q:"So EVM++ Extensions perform what function in the network?", a:["Include new EIPs","Old EIPs","Only token support","Only consensus rules"], correct:"Include new EIPs" },
-  { q:"Which feature allows nodes to granularly participate in execution?", a:["Guardians","Validators","Miners","EVM++"], correct:"Guardians" },
-  { q:"Which network integration backs Ritual nodes seamlessly?", a:["Native Infernet","AWS","Cloudflare","Ethereum"], correct:"Native Infernet" },
-  { q:"What are the core areas of Modular Computational Integrity primitives?", a:["Provenance, privacy, computational integrity","Speed, cost, storage","Consensus, staking, rewards","Security, tokens, contracts"], correct:"Provenance, privacy, computational integrity" },
-  { q:"What does Native Account Abstraction expand?", a:["Capabilities of EOA accounts","Smart contract calls","Gas usage","Node rewards"], correct:"Capabilities of EOA accounts" },
-  { q:"Specialized execution performs which tasks?", a:["AI inference, ZK proofs, TEE code","Faster gas","Token transfers","Staking rewards"], correct:"AI inference, ZK proofs, TEE code" },
-  // More questions here... you can add 50+ like above
+// Example 30+ questions (expand as needed)
+const questions=[
+  {q:"What is the transaction mechanism used by Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
+  {q:"Which innovation allows the Symphony consensus protocol to operate efficiently?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
+  {q:"Which feature allows Scheduled Transactions to work without external keepers?", a:["❖ External keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ External keepers"},
+  {q:"Which storage approach does Modular Storage utilize?", a:["❖ Web2 & Web3 storage","❖ Only Web2","❖ Only Web3","❖ No storage"], correct:"❖ Web2 & Web3 storage"},
+  {q:"So EVM++ Extensions perform what function in the network?", a:["❖ Include new EIPs","❖ Old EIPs","❖ Only token support","❖ Only consensus rules"], correct:"❖ Include new EIPs"},
+  {q:"Which feature allows nodes to granularly participate in execution?", a:["❖ Guardians","❖ Validators","❖ Miners","❖ EVM++"], correct:"❖ Guardians"},
+  {q:"Which network integration backs Ritual nodes seamlessly?", a:["❖ Native Infernet","❖ AWS","❖ Cloudflare","❖ Ethereum"], correct:"❖ Native Infernet"},
+  {q:"What does Native Account Abstraction expand?", a:["❖ Capabilities of EOA accounts","❖ Smart contract calls","❖ Gas usage","❖ Node rewards"], correct:"❖ Capabilities of EOA accounts"},
+  {q:"Specialized execution performs which tasks?", a:["❖ AI inference, ZK proofs, TEE code","❖ Faster gas","❖ Token transfers","❖ Staking rewards"], correct:"❖ AI inference, ZK proofs, TEE code"},
 ];
 
-// Fixed question
-const fixedQuestion = { q:"What is Ritual mascot?", a:["SIGGY","Other","None","Unknown"], correct:"SIGGY" };
+// Fixed mascot question
+const fixedQuestion={q:"What is Ritual mascot?", a:["❖ SIGGY","❖ RITZY","❖ NODESTER","❖ CHAINO"], correct:"❖ SIGGY"};
 
-// Shuffle helper
 function shuffleArray(arr){ return arr.sort(()=>Math.random()-0.5); }
 
-let currentQ=0;
-let score=0;
-let roundQuestions=[];
+let currentQ=0, score=0, roundQuestions=[];
 
 const startBtn=document.getElementById('startBtn');
 const intro=document.getElementById('intro');
+const introMain=document.getElementById('introMain');
+const letsFindOut=document.getElementById('letsFindOut');
 const quiz=document.getElementById('quiz');
 const questionText=document.getElementById('questionText');
 const optionsContainer=document.getElementById('optionsContainer');
@@ -119,35 +101,35 @@ const emojiResult=document.getElementById('emojiResult');
 const scorePercent=document.getElementById('scorePercent');
 const retakeBtn=document.getElementById('retakeBtn');
 const progressBar=document.getElementById('progressBar');
+const resultProgressBar=document.getElementById('resultProgressBar');
+const resultProgressContainer=document.getElementById('resultProgressContainer');
+const evaluationText=document.getElementById('evaluationText');
+const emojiTopAll=document.querySelectorAll('#emojiTop');
 
 function startQuiz(){
     intro.style.display='none';
     quiz.style.display='block';
+    emojiTopAll.forEach(e=>e.style.display='block');
     score=0;
     currentQ=0;
-    roundQuestions = pickRoundQuestions();
+    roundQuestions=pickRoundQuestions();
     showQuestion();
 }
 
-// Pick 10 random + 1 fixed, shuffle all 11
+// Pick 10 random + fixed mascot, shuffle
 function pickRoundQuestions(){
-    const shuffled = shuffleArray([...questions]);
-    const round = shuffled.slice(0,10);
+    const shuffled=shuffleArray([...questions]);
+    const round=shuffled.slice(0,10);
     round.push(fixedQuestion);
-    return shuffleArray(round.map(q=>{
-        q.a = shuffleArray([...q.a]);
-        return q;
-    }));
+    return shuffleArray(round.map(q=>{ q.a=shuffleArray([...q.a]); return q;}));
 }
 
 function showQuestion(){
     nextBtn.style.display='none';
     const q=roundQuestions[currentQ];
-    questionText.innerHTML=q.q;
+    questionText.textContent=q.q;
     optionsContainer.innerHTML='';
-    let progressPercent=((currentQ)/roundQuestions.length)*100;
-    progressBar.style.width=progressPercent+"%";
-
+    progressBar.style.width=((currentQ)/roundQuestions.length*100)+'%';
     q.a.forEach(opt=>{
         const btn=document.createElement('div');
         btn.className='option';
@@ -175,21 +157,45 @@ nextBtn.addEventListener('click',()=>{
 function showResult(){
     quiz.style.display='none';
     resultScreen.style.display='block';
-    let percent=Math.round((score/roundQuestions.length)*100);
+    let percent=Math.round(score/roundQuestions.length*100);
     scorePercent.textContent=percent+"%";
-    if(percent>=70) emojiResult.textContent="😃";
-    else if(percent>=50) emojiResult.textContent="😐";
-    else emojiResult.textContent="😔";
+    resultProgressContainer.style.display='block';
+    setTimeout(()=>{ resultProgressBar.style.width=percent+'%'; },100);
+    if(percent>=80){ emojiResult.textContent="😃"; evaluationText.textContent="Truly Ritual Aligned!"; celebrateConfetti(); }
+    else if(percent>=50){ emojiResult.textContent="😐"; evaluationText.textContent="Decent, but room to grow"; }
+    else{ emojiResult.textContent="😔"; evaluationText.textContent="You need to do better"; }
     retakeBtn.style.display='inline-block';
 }
+
+// Simple confetti for high score
+function celebrateConfetti(){
+    for(let i=0;i<100;i++){
+        let conf=document.createElement('div');
+        conf.textContent="✨";
+        conf.style.position='fixed';
+        conf.style.left=Math.random()*window.innerWidth+'px';
+        conf.style.top=Math.random()*-50+'px';
+        conf.style.fontSize=(Math.random()*20+10)+'px';
+        conf.style.animation=`fall ${2+Math.random()*3}s linear forwards`;
+        document.body.appendChild(conf);
+        setTimeout(()=>conf.remove(),5000);
+    }
+}
+
+const style=document.createElement('style');
+style.innerHTML=`@keyframes fall { 100%{transform:translateY(100vh);opacity:0;} }`;
+document.head.appendChild(style);
 
 retakeBtn.addEventListener('click',()=>{
     resultScreen.style.display='none';
     startQuiz();
 });
 
-setTimeout(()=>{ startBtn.style.display='inline-block'; },2000);
+// Intro animations
+setTimeout(()=>{ introMain.style.opacity=1; },1000);
+setTimeout(()=>{ letsFindOut.style.opacity=1; startBtn.style.display='inline-block'; },2000);
 startBtn.addEventListener('click',startQuiz);
+
 </script>
 </body>
 </html>
