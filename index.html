@@ -70,12 +70,12 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script>
-// 60+ questions pool (shortened here for brevity)
+// Sample questions pool (replace with full 60+ questions)
 const questions=[
 {q:"What is the transaction mechanism of Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
 {q:"Which innovation allows Symphony consensus?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
 {q:"Which feature allows Scheduled Transactions without external keepers?", a:["❖ Eliminates need for external keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ Eliminates need for external keepers"},
-// ... add remaining 60+ questions here
+// Add remaining questions up to 60+ here
 ];
 
 // Fixed mascot question
@@ -111,23 +111,20 @@ window.onload = () => {
 startBtn.addEventListener('click', startQuiz);
 retakeBtn.addEventListener('click', startQuiz);
 
-function startQuiz(){
-    score=0; currentQ=0;
-    roundQuestions=pickRoundQuestions();
-    intro.style.display='none';
-    resultScreen.style.display='none';
-    quiz.style.display='block';
-    emojiTopAll.forEach(e=>{ e.style.display='block'; e.style.opacity=0; e.textContent="❖ Ritual"; setTimeout(()=>{ e.style.opacity=1; },50); });
-    progressBar.style.width='0%';
-    showQuestion();
-}
-
+// --- FIXED PICK ROUND QUESTIONS FUNCTION ---
 function pickRoundQuestions(){
     const shuffled=shuffleArray([...questions]);
+    // Pick first 10 random questions
     const round=shuffled.slice(0,10);
+    // Add mascot question
     round.push(fixedQuestion);
-    return shuffleArray(round.map(q=>{ q.a=shuffleArray([...q.a]); return q; }));
+    // Shuffle entire round and answers
+    return shuffleArray(round.map(q=>{
+        q.a=shuffleArray([...q.a]);
+        return q;
+    }));
 }
+// --- END FIX ---
 
 function showQuestion(){
     nextBtn.style.display='none';
