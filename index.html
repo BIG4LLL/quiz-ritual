@@ -6,21 +6,23 @@
 <title>Ritual Quiz Challenge</title>
 <style>
 body {
-    margin: 0;
+    margin:0;
     font-family: Arial, sans-serif;
-    background: #09120F;
-    color: #E8F3F0;
-    text-align: center;
-    overflow-x: hidden;
+    background:#09120F;
+    color:#E8F3F0;
+    text-align:center;
+    overflow-x:hidden;
 }
+/* INTRO */
 #intro { margin-top:150px; opacity:0; animation: fadeIn 2s forwards; }
-@keyframes fadeIn { 100% { opacity:1; } }
-#startBtn {
-    margin-top:30px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;
-}
+@keyframes fadeIn { 100%{opacity:1;} }
+#introMain { font-size:32px; opacity:0; transition: opacity 2s;}
+#letsFindOut { font-size:24px; opacity:0; transition: opacity 2s;}
+#startBtn { margin-top:30px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;}
 @keyframes popUp { 0%{transform:scale(0.3);opacity:0;}50%{transform:scale(1.1);opacity:1;}70%{transform:scale(0.95);}100%{transform:scale(1);} }
+/* QUIZ */
 .quiz-container { display:none; margin-top:50px; }
-#emojiTop { font-size:50px; margin-bottom:10px; display:none; }
+#emojiTop { font-size:40px; margin-bottom:10px; opacity:0; transition: opacity 2s;}
 .question { font-size:20px; margin-bottom:10px; }
 .option { background:#0F1D19; border:1px solid #1B4F42; padding:12px; margin:10px auto; width:80%; border-radius:8px; cursor:pointer; transition:0.3s transform,0.3s background; }
 .option:hover { background:#143D33; transform:scale(1.05); }
@@ -40,14 +42,14 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 <!-- INTRO -->
 <div id="intro">
     <h2>❖ Ritual Quiz</h2>
-    <h3 id="introMain" style="font-size:32px; margin-top:20px; opacity:0;">How Ritual Aligned Are You?</h3>
-    <h4 id="letsFindOut" style="font-size:24px; margin-top:20px; opacity:0;">Let's Find Out</h4>
+    <h3 id="introMain">How Ritual Aligned Are You?</h3>
+    <h4 id="letsFindOut">Let's Find Out</h4>
     <button id="startBtn">Begin Quiz</button>
 </div>
 
 <!-- QUIZ -->
 <div class="quiz-container" id="quiz">
-    <div id="emojiTop">❖</div>
+    <div id="emojiTop">❖ Ritual</div>
     <div id="progressContainer"><div id="progressBar"></div></div>
     <div class="question" id="questionText"></div>
     <div id="optionsContainer"></div>
@@ -56,7 +58,7 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 
 <!-- RESULT -->
 <div class="quiz-container" id="resultScreen">
-    <div id="emojiTop">❖</div>
+    <div id="emojiTop">❖ Ritual</div>
     <h2>Your Score:</h2>
     <div id="emojiResult"></div>
     <div id="scorePercent"></div>
@@ -68,13 +70,13 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">Built by THE_REAL_BIG4L</a>
 
 <script>
-// Example 30+ questions (expand as needed)
+// Sample questions (add more as needed)
 const questions=[
   {q:"What is the transaction mechanism used by Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
   {q:"Which innovation allows the Symphony consensus protocol to operate efficiently?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
-  {q:"Which feature allows Scheduled Transactions to work without external keepers?", a:["❖ External keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ External keepers"},
+  {q:"Which feature allows Scheduled Transactions to work without external keepers?", a:["❖ Eliminates need for external keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ Eliminates need for external keepers"},
   {q:"Which storage approach does Modular Storage utilize?", a:["❖ Web2 & Web3 storage","❖ Only Web2","❖ Only Web3","❖ No storage"], correct:"❖ Web2 & Web3 storage"},
-  {q:"So EVM++ Extensions perform what function in the network?", a:["❖ Include new EIPs","❖ Old EIPs","❖ Only token support","❖ Only consensus rules"], correct:"❖ Include new EIPs"},
+  {q:"What do EVM++ Extensions include?", a:["❖ New EIPs","❖ Old EIPs","❖ Only token support","❖ Only consensus rules"], correct:"❖ New EIPs"},
   {q:"Which feature allows nodes to granularly participate in execution?", a:["❖ Guardians","❖ Validators","❖ Miners","❖ EVM++"], correct:"❖ Guardians"},
   {q:"Which network integration backs Ritual nodes seamlessly?", a:["❖ Native Infernet","❖ AWS","❖ Cloudflare","❖ Ethereum"], correct:"❖ Native Infernet"},
   {q:"What does Native Account Abstraction expand?", a:["❖ Capabilities of EOA accounts","❖ Smart contract calls","❖ Gas usage","❖ Node rewards"], correct:"❖ Capabilities of EOA accounts"},
@@ -84,10 +86,10 @@ const questions=[
 // Fixed mascot question
 const fixedQuestion={q:"What is Ritual mascot?", a:["❖ SIGGY","❖ RITZY","❖ NODESTER","❖ CHAINO"], correct:"❖ SIGGY"};
 
+// Utility shuffle
 function shuffleArray(arr){ return arr.sort(()=>Math.random()-0.5); }
 
 let currentQ=0, score=0, roundQuestions=[];
-
 const startBtn=document.getElementById('startBtn');
 const intro=document.getElementById('intro');
 const introMain=document.getElementById('introMain');
@@ -102,17 +104,26 @@ const scorePercent=document.getElementById('scorePercent');
 const retakeBtn=document.getElementById('retakeBtn');
 const progressBar=document.getElementById('progressBar');
 const resultProgressBar=document.getElementById('resultProgressBar');
-const resultProgressContainer=document.getElementById('resultProgressContainer');
 const evaluationText=document.getElementById('evaluationText');
 const emojiTopAll=document.querySelectorAll('#emojiTop');
 
+// Start Quiz
 function startQuiz(){
-    intro.style.display='none';
-    quiz.style.display='block';
-    emojiTopAll.forEach(e=>e.style.display='block');
     score=0;
     currentQ=0;
     roundQuestions=pickRoundQuestions();
+    intro.style.display='none';
+    resultScreen.style.display='none';
+    quiz.style.display='block';
+
+    emojiTopAll.forEach(e=>{ 
+        e.style.display='block'; 
+        e.style.opacity=0;
+        e.textContent="❖ Ritual";
+        setTimeout(()=>{ e.style.opacity=1; },50);
+    });
+
+    progressBar.style.width='0%';
     showQuestion();
 }
 
@@ -124,6 +135,7 @@ function pickRoundQuestions(){
     return shuffleArray(round.map(q=>{ q.a=shuffleArray([...q.a]); return q;}));
 }
 
+// Show question
 function showQuestion(){
     nextBtn.style.display='none';
     const q=roundQuestions[currentQ];
@@ -139,6 +151,7 @@ function showQuestion(){
     });
 }
 
+// Select answer
 function selectAnswer(btn,correct){
     const buttons=document.querySelectorAll('.option');
     buttons.forEach(b=>b.style.pointerEvents='none');
@@ -148,27 +161,33 @@ function selectAnswer(btn,correct){
     nextBtn.style.display='inline-block';
 }
 
+// Next button
 nextBtn.addEventListener('click',()=>{
     currentQ++;
     if(currentQ<roundQuestions.length) showQuestion();
     else showResult();
 });
 
+// Show result
 function showResult(){
     quiz.style.display='none';
     resultScreen.style.display='block';
     let percent=Math.round(score/roundQuestions.length*100);
     scorePercent.textContent=percent+"%";
-    resultProgressContainer.style.display='block';
+    resultProgressBar.style.width='0%';
     setTimeout(()=>{ resultProgressBar.style.width=percent+'%'; },100);
-    if(percent>=80){ emojiResult.textContent="😃"; evaluationText.textContent="Truly Ritual Aligned!"; celebrateConfetti(); }
-    else if(percent>=50){ emojiResult.textContent="😐"; evaluationText.textContent="Decent, but room to grow"; }
-    else{ emojiResult.textContent="😔"; evaluationText.textContent="You need to do better"; }
+
+    // Emoji + evaluation text
+    if(percent>=80){ emojiResult.textContent="😃"; evaluationText.textContent=`Gritual, you are truly Ritual aligned!`; }
+    else if(percent>=50){ emojiResult.textContent="😐"; evaluationText.textContent=`Gritual, decent effort but room to grow.`; }
+    else{ emojiResult.textContent="😔"; evaluationText.textContent=`Gritual, you need to do better.`; }
+
     retakeBtn.style.display='inline-block';
+    runConfetti();
 }
 
-// Simple confetti for high score
-function celebrateConfetti(){
+// Confetti always
+function runConfetti(){
     for(let i=0;i<100;i++){
         let conf=document.createElement('div');
         conf.textContent="✨";
@@ -176,20 +195,18 @@ function celebrateConfetti(){
         conf.style.left=Math.random()*window.innerWidth+'px';
         conf.style.top=Math.random()*-50+'px';
         conf.style.fontSize=(Math.random()*20+10)+'px';
+        conf.style.zIndex=9999;
         conf.style.animation=`fall ${2+Math.random()*3}s linear forwards`;
         document.body.appendChild(conf);
         setTimeout(()=>conf.remove(),5000);
     }
 }
-
 const style=document.createElement('style');
 style.innerHTML=`@keyframes fall { 100%{transform:translateY(100vh);opacity:0;} }`;
 document.head.appendChild(style);
 
-retakeBtn.addEventListener('click',()=>{
-    resultScreen.style.display='none';
-    startQuiz();
-});
+// Retake
+retakeBtn.addEventListener('click', startQuiz);
 
 // Intro animations
 setTimeout(()=>{ introMain.style.opacity=1; },1000);
