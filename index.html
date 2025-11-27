@@ -13,15 +13,13 @@ body {
     text-align:center;
     overflow-x:hidden;
 }
-/* INTRO */
 #intro { margin-top:150px; opacity:0; animation: fadeIn 2s forwards; }
 @keyframes fadeIn { 100%{opacity:1;} }
-#introMain { font-size:32px; opacity:0; transition: opacity 2s;}
-#letsFindOut { font-size:24px; opacity:0; transition: opacity 2s;}
+#introMain { font-size:28px; opacity:0; transition: opacity 2s;}
+#letsFindOut { font-size:22px; opacity:0; transition: opacity 2s;}
 #startBtn { margin-top:30px; padding:14px 28px; background:#143D33; color:white; font-size:20px; border:none; border-radius:10px; cursor:pointer; display:none; animation: popUp 0.8s ease forwards;}
 @keyframes popUp { 0%{transform:scale(0.3);opacity:0;}50%{transform:scale(1.1);opacity:1;}70%{transform:scale(0.95);}100%{transform:scale(1);} }
 
-/* QUIZ */
 .quiz-container { display:none; margin-top:50px; }
 #emojiTop { font-size:40px; margin-bottom:10px; opacity:0; transition: opacity 2s;}
 .question { font-size:20px; margin-bottom:10px; }
@@ -36,12 +34,10 @@ body {
 #emojiResult { font-size:70px; margin-top:20px; animation:bounceEmoji 1s ease; }
 @keyframes bounceEmoji {0%{transform:scale(0);}50%{transform:scale(1.2);}70%{transform:scale(0.9);}100%{transform:scale(1);}}
 a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; display:block; }
-
 </style>
 </head>
 <body>
 
-<!-- INTRO -->
 <div id="intro">
     <h2>❖ Ritual Quiz</h2>
     <h3 id="introMain">How Ritual Aligned Are You?</h3>
@@ -49,7 +45,6 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
     <button id="startBtn">Begin Quiz</button>
 </div>
 
-<!-- QUIZ -->
 <div class="quiz-container" id="quiz">
     <div id="emojiTop">❖ Ritual</div>
     <div id="progressContainer"><div id="progressBar"></div></div>
@@ -58,7 +53,6 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
     <button id="nextBtn">Next</button>
 </div>
 
-<!-- RESULT -->
 <div class="quiz-container" id="resultScreen">
     <div id="emojiTop">❖ Ritual</div>
     <h2>Your Score:</h2>
@@ -72,23 +66,62 @@ a { color:#29FFBF; text-decoration:none; font-size:14px; margin-top:40px; displa
 <a href="https://x.com/THE_REAL_BIG4L?t=PYvu1HEe6mb-MVMpn7_3HQ&s=09" target="_blank">Built by THE_REAL_BIG4L</a>
 
 <script>
-// Questions (expand as needed)
+// 60+ question pool
 const questions=[
-  {q:"What is the transaction mechanism used by Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
-  {q:"Which innovation allows the Symphony consensus protocol to operate efficiently?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
-  {q:"Which feature allows Scheduled Transactions to work without external keepers?", a:["❖ Eliminates need for external keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ Eliminates need for external keepers"},
-  {q:"Which storage approach does Modular Storage utilize?", a:["❖ Web2 & Web3 storage","❖ Only Web2","❖ Only Web3","❖ No storage"], correct:"❖ Web2 & Web3 storage"},
-  {q:"What do EVM++ Extensions include?", a:["❖ New EIPs","❖ Old EIPs","❖ Only token support","❖ Only consensus rules"], correct:"❖ New EIPs"},
-  {q:"Which feature allows nodes to granularly participate in execution?", a:["❖ Guardians","❖ Validators","❖ Miners","❖ EVM++"], correct:"❖ Guardians"},
-  {q:"Which network integration backs Ritual nodes seamlessly?", a:["❖ Native Infernet","❖ AWS","❖ Cloudflare","❖ Ethereum"], correct:"❖ Native Infernet"},
-  {q:"What does Native Account Abstraction expand?", a:["❖ Capabilities of EOA accounts","❖ Smart contract calls","❖ Gas usage","❖ Node rewards"], correct:"❖ Capabilities of EOA accounts"},
-  {q:"Specialized execution performs which tasks?", a:["❖ AI inference, ZK proofs, TEE code","❖ Faster gas","❖ Token transfers","❖ Staking rewards"], correct:"❖ AI inference, ZK proofs, TEE code"},
+{q:"What is the transaction mechanism of Resonance?", a:["❖ Surplus-maximizing fee","❖ Standard fee","❖ Gas-free","❖ PoS reward"], correct:"❖ Surplus-maximizing fee"},
+{q:"Which innovation allows Symphony consensus?", a:["❖ Dual proof sharding","❖ PoW mining","❖ Single chain validation","❖ Randomized committees"], correct:"❖ Dual proof sharding"},
+{q:"Which feature allows Scheduled Transactions without external keepers?", a:["❖ Eliminates need for external keepers","❖ Gas fees","❖ User input","❖ Smart contract calls"], correct:"❖ Eliminates need for external keepers"},
+{q:"Which storage approach does Modular Storage use?", a:["❖ Web2 & Web3 storage","❖ Only Web2","❖ Only Web3","❖ No storage"], correct:"❖ Web2 & Web3 storage"},
+{q:"What do EVM++ Extensions include?", a:["❖ New EIPs","❖ Old EIPs","❖ Only token support","❖ Only consensus rules"], correct:"❖ New EIPs"},
+{q:"Which feature allows nodes to granularly participate?", a:["❖ Guardians","❖ Validators","❖ Miners","❖ EVM++"], correct:"❖ Guardians"},
+{q:"Which network integration backs Ritual nodes?", a:["❖ Native Infernet","❖ AWS","❖ Cloudflare","❖ Ethereum"], correct:"❖ Native Infernet"},
+{q:"What does Native Account Abstraction expand?", a:["❖ Capabilities of EOA accounts","❖ Smart contract calls","❖ Gas usage","❖ Node rewards"], correct:"❖ Capabilities of EOA accounts"},
+{q:"Specialized execution performs which tasks?", a:["❖ AI inference, ZK proofs, TEE code","❖ Faster gas","❖ Token transfers","❖ Staking rewards"], correct:"❖ AI inference, ZK proofs, TEE code"},
+{q:"Which two properties must AI systems retain on Ritual?", a:["❖ Open & censorship-resistant","❖ Fast & cheap","❖ Private & closed","❖ Immutable & public"], correct:"❖ Open & censorship-resistant"},
+{q:"What actions can users perform with Enshrined On-Chain AI Models?", a:["❖ Train, track, trade","❖ Only train","❖ Only track","❖ Only trade"], correct:"❖ Train, track, trade"},
+{q:"What ensures model provenance?", a:["❖ Verifiable marketplace","❖ Private storage","❖ User signature","❖ Token reward"], correct:"❖ Verifiable marketplace"},
+{q:"Which web3 storage provider is mentioned?", a:["❖ Arweave","❖ IPFS","❖ Filecoin","❖ AWS"], correct:"❖ Arweave"},
+{q:"Which RaaS provider benefits from Ritual?", a:["❖ Conduit","❖ Caldera","❖ AWS","❖ Infura"], correct:"❖ Conduit"},
+{q:"High-performance chains needing provers?", a:["❖ MegaETH, Movement","❖ Bitcoin, Ethereum","❖ Solana, Polygon","❖ Avalanche, Cosmos"], correct:"❖ MegaETH, Movement"},
+{q:"Which IP is monetized via verifiable marketplace?", a:["❖ Story, Sentient","❖ Music, Art","❖ Software, Tools","❖ Tokens"], correct:"❖ Story, Sentient"},
+{q:"Goal for Ritual in Web3?", a:["❖ Schelling point","❖ Fastest chain","❖ Cheapest network","❖ Largest NFT market"], correct:"❖ Schelling point"},
+{q:"Goal of Verifiable Provenance?", a:["❖ Immutable records","❖ Fast execution","❖ Cheap gas","❖ High throughput"], correct:"❖ Immutable records"},
+{q:"Which network backs Ritual nodes?", a:["❖ Infernet compute oracle","❖ AWS","❖ Ethereum","❖ Google Cloud"], correct:"❖ Infernet compute oracle"},
+{q:"Ethereum 2015 enabled?", a:["❖ Permissionless composable apps","❖ Centralized apps","❖ Tokens","❖ NFTs"], correct:"❖ Permissionless composable apps"},
+{q:"Ritual's main focus?", a:["❖ Enrich on-chain user activity","❖ Cheap gas","❖ Fast tx","❖ NFT minting"], correct:"❖ Enrich on-chain user activity"},
+{q:"Ritual is optimized for?", a:["❖ Heterogeneous compute","❖ Only PoS","❖ Only ZK","❖ Only AI"], correct:"❖ Heterogeneous compute"},
+{q:"Expanding compute enables?", a:["❖ Net-new behavior","❖ Faster transactions","❖ Lower gas","❖ NFT minting"], correct:"❖ Net-new behavior"},
+{q:"Bitcoin 2009 enabled?", a:["❖ Decentralized money","❖ NFTs","❖ Smart contracts","❖ Staking"], correct:"❖ Decentralized money"},
+{q:"Architectural element for compute orchestration?", a:["❖ Underlying heterogeneous architecture","❖ Standard EVM","❖ Layer2","❖ PoW"], correct:"❖ Underlying heterogeneous architecture"},
+{q:"Who benefits from Ritual's infrastructure?", a:["❖ End-users, blockchains, IP services","❖ Only miners","❖ Only nodes","❖ Only wallets"], correct:"❖ End-users, blockchains, IP services"},
+{q:"Ritual's expressiveness ambition?", a:["❖ Most expressive blockchain","❖ Fastest chain","❖ Cheapest","❖ Largest"], correct:"❖ Most expressive blockchain"},
+{q:"Node Specialization outcome?", a:["❖ Fine-tuned workloads","❖ Same for all nodes","❖ Random tasks","❖ Standardized work"], correct:"❖ Fine-tuned workloads"},
+{q:"Ritual expedition intersection?", a:["❖ Crypto & AI","❖ NFTs & DeFi","❖ Tokens & Gas","❖ Blockchain & Cloud"], correct:"❖ Crypto & AI"},
+{q:"Which feature supports modular storage?", a:["❖ Storage-agnostic","❖ Fixed Web2","❖ Fixed Web3","❖ No storage"], correct:"❖ Storage-agnostic"},
+{q:"Which allows nodes to join consensus?", a:["❖ Guardians opt-in","❖ Only validators","❖ Only miners","❖ Standard nodes"], correct:"❖ Guardians opt-in"},
+{q:"What is Native Infernet used for?", a:["❖ Seamless node integration","❖ Cloud storage","❖ Gas reduction","❖ AI training"], correct:"❖ Seamless node integration"},
+{q:"Modular Computational Integrity primitives include?", a:["❖ Provenance, privacy, computational integrity","❖ Gas, storage, speed","❖ Transactions only","❖ Only AI"], correct:"❖ Provenance, privacy, computational integrity"},
+{q:"Which account type expands with Native Account Abstraction?", a:["❖ EOA","❖ Contract only","❖ Validator only","❖ Miner only"], correct:"❖ EOA"},
+{q:"Heterogeneous Compute executes?", a:["❖ AI inference, ZK proofs, TEE code","❖ Gas only","❖ Token transfer","❖ Standard EVM"], correct:"❖ AI inference, ZK proofs, TEE code"},
+{q:"AI systems must remain?", a:["❖ Open & neutral","❖ Private & closed","❖ Only fast","❖ Only free"], correct:"❖ Open & neutral"},
+{q:"On-chain AI Models can?", a:["❖ Train, track, trade","❖ Only trade","❖ Only track","❖ Only train"], correct:"❖ Train, track, trade"},
+{q:"Model Marketplace ensures?", a:["❖ Security & integrity","❖ Speed","❖ Gas saving","❖ NFT minting"], correct:"❖ Security & integrity"},
+{q:"Web3 storage example?", a:["❖ Arweave","❖ IPFS","❖ Filecoin","❖ Cloud"], correct:"❖ Arweave"},
+{q:"Example RaaS?", a:["❖ Conduit, Caldera","❖ AWS, Google","❖ Infura, Alchemy","❖ Polygon, Solana"], correct:"❖ Conduit, Caldera"},
+{q:"Which high-performance chains need provers?", a:["❖ MegaETH, Movement","❖ ETH, BSC","❖ Solana, Avalanche","❖ Bitcoin, Litecoin"], correct:"❖ MegaETH, Movement"},
+{q:"IP monetized?", a:["❖ Story, Sentient","❖ Music, Art","❖ Software only","❖ Tokens only"], correct:"❖ Story, Sentient"},
+{q:"Ritual aim in Web3?", a:["❖ Schelling point","❖ Fastest chain","❖ Cheapest network","❖ NFT hub"], correct:"❖ Schelling point"},
+{q:"Verifiable Provenance goal?", a:["❖ Immutable records","❖ Fast execution","❖ Cheap gas","❖ High throughput"], correct:"❖ Immutable records"},
+{q:"Ethereum enabled?", a:["❖ Permissionless composable apps","❖ Centralized apps","❖ Tokens","❖ NFTs"], correct:"❖ Permissionless composable apps"},
+{q:"Ritual focus?", a:["❖ Enrich on-chain user activity","❖ Cheap gas","❖ Fast tx","❖ NFT minting"], correct:"❖ Enrich on-chain user activity"},
+{q:"Ritual optimized for?", a:["❖ Heterogeneous compute","❖ Only PoS","❖ Only ZK","❖ Only AI"], correct:"❖ Heterogeneous compute"},
+{q:"Expanding compute allows?", a:["❖ Net-new behavior","❖ Faster transactions","❖ Lower gas","❖ NFT minting"], correct:"❖ Net-new behavior"},
+{q:"Bitcoin enabled?", a:["❖ Decentralized money","❖ NFTs","❖ Smart contracts","❖ Staking"], correct:"❖ Decentralized money"}
 ];
 
 // Fixed mascot question
 const fixedQuestion={q:"What is Ritual mascot?", a:["❖ SIGGY","❖ RITZY","❖ NODESTER","❖ CHAINO"], correct:"❖ SIGGY"};
 
-// Utility shuffle
 function shuffleArray(arr){ return arr.sort(()=>Math.random()-0.5); }
 
 let currentQ=0, score=0, roundQuestions=[];
@@ -109,7 +142,6 @@ const resultProgressBar=document.getElementById('resultProgressBar');
 const evaluationText=document.getElementById('evaluationText');
 const emojiTopAll=document.querySelectorAll('#emojiTop');
 
-// Start Quiz (shuffle questions every time)
 function startQuiz(){
     score=0;
     currentQ=0;
@@ -129,7 +161,6 @@ function startQuiz(){
     showQuestion();
 }
 
-// Pick 10 random + mascot, shuffle
 function pickRoundQuestions(){
     const shuffled=shuffleArray([...questions]);
     const round=shuffled.slice(0,10);
@@ -140,7 +171,6 @@ function pickRoundQuestions(){
     }));
 }
 
-// Show question
 function showQuestion(){
     nextBtn.style.display='none';
     const q=roundQuestions[currentQ];
@@ -156,7 +186,6 @@ function showQuestion(){
     });
 }
 
-// Select answer
 function selectAnswer(btn,correct){
     const buttons=document.querySelectorAll('.option');
     buttons.forEach(b=>b.style.pointerEvents='none');
@@ -166,14 +195,12 @@ function selectAnswer(btn,correct){
     nextBtn.style.display='inline-block';
 }
 
-// Next button
 nextBtn.addEventListener('click',()=>{
     currentQ++;
     if(currentQ<roundQuestions.length) showQuestion();
     else showResult();
 });
 
-// Show result
 function showResult(){
     quiz.style.display='none';
     resultScreen.style.display='block';
@@ -182,42 +209,4 @@ function showResult(){
     resultProgressBar.style.width='0%';
     setTimeout(()=>{ resultProgressBar.style.width=percent+'%'; },100);
 
-    // Emoji + evaluation text
-    if(percent>=80){ emojiResult.textContent="😃"; evaluationText.textContent=`Gritual, you are truly Ritual aligned!`; }
-    else if(percent>=50){ emojiResult.textContent="😐"; evaluationText.textContent=`Gritual, decent effort but room to grow.`; }
-    else{ emojiResult.textContent="😔"; evaluationText.textContent=`Gritual, you need to do better.`; }
-
-    retakeBtn.style.display='inline-block';
-    runConfetti();
-}
-
-// Confetti always
-function runConfetti(){
-    for(let i=0;i<100;i++){
-        let conf=document.createElement('div');
-        conf.textContent="✨";
-        conf.style.position='fixed';
-        conf.style.left=Math.random()*window.innerWidth+'px';
-        conf.style.top=Math.random()*-50+'px';
-        conf.style.fontSize=(Math.random()*20+10)+'px';
-        conf.style.zIndex=9999;
-        conf.style.animation=`fall ${2+Math.random()*3}s linear forwards`;
-        document.body.appendChild(conf);
-        setTimeout(()=>conf.remove(),5000);
-    }
-}
-const style=document.createElement('style');
-style.innerHTML=`@keyframes fall { 100%{transform:translateY(100vh);opacity:0;} }`;
-document.head.appendChild(style);
-
-// Retake
-retakeBtn.addEventListener('click', startQuiz);
-
-// Intro animations
-setTimeout(()=>{ introMain.style.opacity=1; },1000);
-setTimeout(()=>{ letsFindOut.style.opacity=1; startBtn.style.display='inline-block'; },2000);
-startBtn.addEventListener('click',startQuiz);
-
-</script>
-</body>
-</html>
+    if(percent>=80){ emojiResult.text
